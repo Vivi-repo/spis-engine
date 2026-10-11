@@ -1,18 +1,21 @@
 # SPIS Engine
 
-**Sensory-Paced Infinite Scroll.** Post-ranking middleware that paces visual feeds so users don't hit sensory overload and leave.
-
-**Live demo:** _add your Vercel URL here_
-
 ## The Problem
 
-Infinite visual grids pile on stimulus with no pause.
+Some users don't leave a feed because they're done. They leave because it overwhelmed them.
 
-* Dense text, high contrast, busy patterns, back to back.
-* Users with sensory gating differences can't filter the repeats out.
+* Infinite grids have no natural pauses.
+* Dense text, high contrast and busy patterns arrive back to back.
+* Users who are sensitive to sensory input, common in autism and ADHD, can't filter the repeats out.
 * Load builds instead of fading.
-* They hit overload and close the app.
-* The session ends early, and every ad slot after that point goes unserved.
+* They close the app at a point they didn't choose, often mid-interest.
+* That's a worse experience for them, and a lost session for the platform.
+
+The goal isn't to make anyone scroll longer. It's to stop overload from pushing people out.
+
+**Sensory-Paced Infinite Scroll (SPIS)** is post-ranking middleware that adds calm pauses to visual feeds.
+
+**Live demo:** _add your Vercel URL here_
 
 ## The Solution
 
@@ -55,8 +58,9 @@ Recommendation engine ──► SPIS proxy ──► Client worker ──► Pac
 
 ## Enterprise Impact
 
-* **Longer sessions:** 2.4 to 7.4 minutes in simulation at the default limit of 65.
-* **More ad inventory:** +8.4 ad windows per session in simulation.
+* **Fewer forced exits:** in simulation at the default limit of 65, overload hits after 84 pins instead of 34.
+* **Recovered inventory:** sessions that overload would have cut short keep running, worth +8.4 ad windows per session in simulation.
+* **Right success metric:** overload-driven exits and self-reported overwhelm first. Session length is secondary.
 * **No added serving compute:** scoring runs once at upload, about 15 ms of CPU per image, roughly $170 to backfill 1B pins.
 * **Storage:** about $8 a month per billion pins, stored as a field on the existing pin record in DynamoDB.
 * **Ad context (hypothesis):** each record carries a theme-cluster byte that ad matching could use. Not modeled yet.

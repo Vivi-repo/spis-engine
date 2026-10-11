@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Layout: control-room console. Fatigue meter band on top, two feeds side by side, operator panel on the right. */
+:root {
+  --bg: 241 243 246;
+  --surface: 255 255 255;
+  --surface2: 233 237 242;
+  --line: 214 221 229;
+  --ink: 17 26 38;
+  --muted: 84 98 116;
+  --accent: 47 107 208;
+  --std: 201 96 31;
+  --safe: 26 135 80;
+  --warn: 166 120 8;
+  --strain: 205 92 26;
+  --crit: 200 44 44;
+  --c1: 42 120 214; --c2: 235 104 52; --c3: 27 175 122; --c4: 237 161 0; --c5: 232 123 164;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: 11 16 23; --surface: 18 25 34; --surface2: 26 35 47; --line: 40 52 68;
+    --ink: 228 235 243; --muted: 148 162 180; --accent: 98 148 228; --std: 221 128 66;
+    --safe: 70 190 125; --warn: 228 182 66; --strain: 238 132 70; --crit: 240 92 88;
+    --c1: 57 135 229; --c2: 217 89 38; --c3: 25 158 112; --c4: 201 133 0; --c5: 213 81 129;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: 11 16 23; --surface: 18 25 34; --surface2: 26 35 47; --line: 40 52 68;
+  --ink: 228 235 243; --muted: 148 162 180; --accent: 98 148 228; --std: 221 128 66;
+  --safe: 70 190 125; --warn: 228 182 66; --strain: 238 132 70; --crit: 240 92 88;
+  --c1: 57 135 229; --c2: 217 89 38; --c3: 25 158 112; --c4: 201 133 0; --c5: 213 81 129;
+}
+body { background: rgb(var(--bg)); color: rgb(var(--ink)); font-family: var(--font-body); }
+h1, h2, h3 { text-wrap: balance; }
+.tnum { font-variant-numeric: tabular-nums; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: rgb(var(--muted)); }
+.feed-scroll { scrollbar-width: thin; scrollbar-color: rgb(var(--line)) transparent; overscroll-behavior: contain; }
+.pin-flash { animation: pinFlash .9s steps(2, jump-none) infinite alternate; }
+@keyframes pinFlash { from { filter: none; } to { filter: saturate(1.9) contrast(1.35) brightness(1.12); } }
+.meter-crit { animation: critPulse 1s ease-in-out infinite; }
+@keyframes critPulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+.fade-in { animation: fadeIn .35s ease-out; }
+.arch-flow { animation: archFlow .8s linear infinite; }
+@keyframes archFlow { to { stroke-dashoffset: -11; } }
+@keyframes fadeIn { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+input[type=range] { accent-color: rgb(var(--accent)); }
+:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .pin-flash, .meter-crit, .fade-in, .arch-flow { animation: none !important; }
+  * { scroll-behavior: auto !important; }
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; }

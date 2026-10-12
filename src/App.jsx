@@ -32,7 +32,7 @@ export function App() {
   const lastTraceAt = useRef(0);
   const pacing = breaksOn && !outage;
   const pushTrace = useCallback(down => setTraces(t => [...t.slice(-299), down ? { ...sampleTrace(), hydrate: null } : sampleTrace()]), []);
-  const [assume, setAssume] = useState({ sessions: 20, eligible: 15, ecpm: 4.5, fill: 70 });
+  const [assume, setAssume] = useState({ sessions: 20, eligible: 15, overload: 10, ecpm: 4.5, fill: 70 });
   const pacedRef = useRef(null);
 
   const stdList = useMemo(() => Array.from({ length: counts.standard }, (_, i) => getItem(i)), [counts.standard]);

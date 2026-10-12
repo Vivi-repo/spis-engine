@@ -5,7 +5,7 @@ export function Bridge() {
     { icon: 'Cpu', title: 'Measure', body: 'An async OpenCV/SciPy worker scores each image once at upload: FFT high-frequency energy, 256-bin Shannon entropy, and Canny edge ratio.' },
     { icon: 'Gauge', title: 'Score', body: 'The three signals fold into one Sensory Loading Score: 0.40·SF + 0.35·CE + 0.25·ED. It ships as a single field on the pin payload.' },
     { icon: 'Layers', title: 'Pace', body: 'At ranking time the middleware reads the score and places a rest break after any pin above the trigger. Ranking and creative are untouched.' },
-    { icon: 'TrendingUp', title: 'Retain', body: 'Flatter fatigue curves mean longer sessions. Each extra six pins opens another ad window, which is where the revenue line comes from.' },
+    { icon: 'TrendingUp', title: 'Recover', body: 'Fewer sessions end in overload. Every six pins a user would have lost to overload is another ad window, and only those count toward revenue.' },
   ];
   return (
     <section className="rounded-2xl border border-line bg-surface p-4 sm:p-5 grid gap-4" aria-label="How SPIS links neuro-data to retention">

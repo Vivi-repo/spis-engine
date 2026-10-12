@@ -44,7 +44,8 @@ export function NumField({ id, label, value, onChange, step, prefix, suffix }) {
 }
 
 export function ControlPanel({ threshold, setThreshold, breaksOn, setBreaksOn, flashOn, setFlashOn, kpi, assume, setAssume, traces, infra, setInfra, outage }) {
-  const daily = assume.sessions * 1e6 * (assume.eligible / 100) * kpi.retainedAds * (assume.fill / 100) * assume.ecpm / 1000;
+  // Only sessions that would have ended in overload can be recovered; everyone else leaves for their own reasons.
+  const daily = assume.sessions * 1e6 * (assume.eligible / 100) * (assume.overload / 100) * kpi.retainedAds * (assume.fill / 100) * assume.ecpm / 1000;
   const annual = daily * 365;
   return (
     <aside className="grid gap-4 content-start min-w-0" aria-label="Solutions Engineering Control Panel">
@@ -68,18 +69,20 @@ export function ControlPanel({ threshold, setThreshold, breaksOn, setBreaksOn, f
 
       <section className="rounded-2xl border border-line bg-surface p-4 grid gap-3">
         <div>
-          <div className="eyebrow flex items-center gap-1.5"><Icon name="TrendingUp" size={13} />Business KPIs · 20 simulated sessions</div>
-          <h2 className="font-display text-[19px] font-bold mt-1">What pacing is worth</h2>
+          <div className="eyebrow flex items-center gap-1.5"><Icon name="TrendingUp" size={13} />Overload model · 20 simulated sessions</div>
+          <h2 className="font-display text-[19px] font-bold mt-1">What overload is costing</h2>
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <Kpi label="Simulated Session Length Extension" value={`+${fmt(kpi.extension, 0)}%`} tone="text-accent"
-            sub={`${fmt(kpi.std.t / 60)} → ${fmt(kpi.paced.t / 60)} min`} />
-          <Kpi label="Retained Ad Inventory Windows" value={`+${fmt(kpi.retainedAds)}`}
-            sub={`${fmt(kpi.std.ads)} → ${fmt(kpi.paced.ads)} per session`} />
-          <Kpi label="Pins before overload" value={`${fmt(kpi.paced.content, 0)}`} sub={`vs ${fmt(kpi.std.content, 0)} un-throttled`} />
+          <Kpi label="Pins before overload" value={`${fmt(kpi.std.content, 0)} → ${fmt(kpi.paced.content, 0)}`} tone="text-accent"
+            sub="un-throttled → paced" />
+          <Kpi label="Ad windows recovered per overload exit" value={`+${fmt(kpi.retainedAds)}`}
+            sub={`${fmt(kpi.std.ads)} → ${fmt(kpi.paced.ads)} before overload`} />
+          <Kpi label="Time to overload" value={`${fmt(kpi.std.t / 60)} → ${fmt(kpi.paced.t / 60)}`}
+            sub={`minutes · +${fmt(kpi.extension, 0)}% if the user would have kept going`} />
           <Kpi label="Buffer overhead" value={`${fmt(kpi.overhead, 0)}%`} sub={`${fmt(kpi.paced.breaks, 0)} breaks per session`}
             tone={kpi.overhead > 40 ? 'text-warn' : ''} />
         </div>
+        <p className="text-[11px] text-muted leading-snug">Simulated users scroll until overload stops them. Real users also leave because they found what they wanted, so these figures apply only to sessions that end in overload.</p>
         <div className="rounded-xl border border-line p-3 grid gap-2">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <span className="text-[12.5px] font-medium">Projected fatigue, one typical session</span>
@@ -96,18 +99,21 @@ export function ControlPanel({ threshold, setThreshold, breaksOn, setBreaksOn, f
       <section className="rounded-2xl border border-line bg-surface p-4 grid gap-3">
         <div>
           <div className="eyebrow flex items-center gap-1.5"><Icon name="DollarSign" size={13} />Revenue bridge · illustrative</div>
-          <h2 className="font-display text-[19px] font-bold mt-1">{money(annual)} <span className="text-[14px] font-medium text-muted">per year retained</span></h2>
+          <h2 className="font-display text-[19px] font-bold mt-1">{money(annual)} <span className="text-[14px] font-medium text-muted">per year recovered</span></h2>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <NumField id="a-sessions" label="Daily sessions" value={assume.sessions} step="1" suffix="M" onChange={v => setAssume(a => ({ ...a, sessions: v }))} />
           <NumField id="a-eligible" label="Sensory-sensitive share" value={assume.eligible} step="1" suffix="%" onChange={v => setAssume(a => ({ ...a, eligible: v }))} />
           <NumField id="a-ecpm" label="eCPM" value={assume.ecpm} step="0.5" prefix="$" onChange={v => setAssume(a => ({ ...a, ecpm: v }))} />
           <NumField id="a-fill" label="Ad fill rate" value={assume.fill} step="1" suffix="%" onChange={v => setAssume(a => ({ ...a, fill: v }))} />
+          <div className="col-span-2">
+            <NumField id="a-overload" label="Their sessions that end in overload (unknown: measure first)" value={assume.overload} step="1" suffix="%" onChange={v => setAssume(a => ({ ...a, overload: Math.min(100, v) }))} />
+          </div>
         </div>
         <div className="font-mono text-[10.5px] text-muted leading-relaxed break-words">
-          {assume.sessions}M × {assume.eligible}% × {fmt(kpi.retainedAds)} windows × {assume.fill}% fill × ${assume.ecpm} / 1000 × 365
+          {assume.sessions}M sessions × {assume.eligible}% sensitive × {assume.overload}% overload exits × {fmt(kpi.retainedAds)} windows × {assume.fill}% fill × ${assume.ecpm} / 1000 × 365
         </div>
-        <p className="text-[11px] text-muted leading-snug">Placeholder assumptions for a large visual platform. Replace them with the prospect’s own numbers during discovery.</p>
+        <p className="text-[11px] text-muted leading-snug">Placeholder assumptions. The overload-exit share drives the result and nobody knows it yet; measuring it from session logs is the first validation step.</p>
       </section>
 
       <HealthCard traces={traces} infra={infra} setInfra={setInfra} outage={outage} annualRevenue={annual} />

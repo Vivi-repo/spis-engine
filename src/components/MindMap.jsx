@@ -245,7 +245,7 @@ export function MindMap({ sessions, threshold, breaksOn, reduced }) {
         {[
           ['Zap', 'Why the standard path zigzags', 'Back-to-back pins above SLS 62 stack up gating load. Once the brain’s filter is saturated, every new pin captures attention completely, so the path jumps straight to it and loses all direction.'],
           ['Waves', 'Why the paced path glides', 'Each rest break clears the gating load. With the filter intact, a new pin only nudges attention and the previous direction carries through, so the path drifts between neighboring themes.'],
-          ['TrendingUp', 'What it means commercially', 'Jagged paths are what users feel just before they close the app. A smooth path through their own taste clusters is a session that keeps going, and keeps filling ad windows.'],
+          ['TrendingUp', 'What it means commercially', 'Jagged paths are what users feel just before they close the app. A smooth path through their own taste clusters is a session that ends when the user decides, not when overload decides for them.'],
         ].map(([ic, t, b]) => (
           <div key={t} className="grid gap-1 content-start">
             <div className="flex items-center gap-1.5 text-[13px] font-medium"><Icon name={ic} size={14} className="text-accent" />{t}</div>

@@ -37,7 +37,7 @@ export function HealthCard({ traces, infra, setInfra, outage, annualRevenue }) {
         note={`${infra.pinsB}B pins × ${32 + tier.overhead} B on ${tier.name.split(',')[0]}. Change the tier in Architecture.`} />
       <Row icon="Server" label="Core model changes" value="None" tone="text-safe" note="No feature, weight, or ranking change. Ships behind a remote-config flag." />
       <div className="rounded-lg bg-surface2/60 px-3 py-2 mt-1 text-[12px] leading-snug">
-        Storage runs {moneyFine(monthly * 12)} a year against {money(annualRevenue)} in retained ad revenue
+        Storage runs {moneyFine(monthly * 12)} a year against {money(annualRevenue)} in recovered ad revenue
         {annualRevenue > 0 && <> , or <b className="tnum">{share < 0.001 ? '< 0.001' : fmt(share, 3)}%</b> of the upside</>}.
       </div>
     </section>

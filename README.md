@@ -84,7 +84,7 @@ Recommendation engine ──► SPIS proxy ──► Client worker ──► Pac
 ## Enterprise Impact
 
 * **Fewer forced exits:** in simulation at the default limit of 65, overload hits after 84 pins instead of 34.
-* **Recovered inventory:** sessions that overload would have cut short keep running, worth +8.4 ad windows per session in simulation.
+* **Recovered inventory:** +8.4 ad windows for each session that would otherwise have ended in overload, in simulation. Revenue depends on what share of sessions end that way, which has to be measured first.
 * **Right success metric:** overload-driven exits and self-reported overwhelm first. Session length is secondary.
 * **No added serving compute:** scoring runs once at upload, about 15 ms of CPU per image, roughly $170 to backfill 1B pins.
 * **Storage:** about $8 a month per billion pins, stored as a field on the existing pin record in DynamoDB.

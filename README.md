@@ -15,7 +15,7 @@ The goal isn't to make anyone scroll longer. It's to stop overload from pushing 
 
 **Sensory-Paced Infinite Scroll (SPIS)** is post-ranking middleware that adds calm pauses to visual feeds.
 
-**Live demo:** _add your Vercel URL here_
+**Live demo:** https://spis-engine.vercel.app
 
 ## The Solution
 

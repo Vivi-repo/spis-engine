@@ -41,6 +41,31 @@ An async OpenCV/SciPy worker computes three scores per image at upload.
 SLS = (0.40 × Spatial Frequency) + (0.35 × Color Entropy) + (0.25 × Edge Density)
 ```
 
+## Validation
+
+The demo simulates scores. [`validation/`](validation/) computes them for real with OpenCV and tests them against people.
+
+Benchmark: 1,420 images from [SAVOIAS](https://github.com/esaraee/Savoias-Dataset), each with a visual complexity score from 37,000+ crowd-sourced comparisons.
+
+| Category | Spearman ρ, SLS vs humans |
+|---|---|
+| Interior design | 0.70 |
+| Advertisements | 0.68 |
+| Infographics | 0.65 |
+| Art | 0.60 |
+| Suprematism (abstract) | 0.58 |
+| Objects | 0.42 |
+| Scenes | 0.41 |
+
+* **Pass mark, set before the run:** ρ ≥ 0.5. Passed in 5 of 7 categories. Mean ρ 0.58.
+* **Ads and objects:** higher than the existing measures in the SAVOIAS README (Pearson 0.69 vs 0.56, and 0.42 vs 0.30).
+* **Abstract art:** lower (0.56 vs 0.84).
+* **Weak spot:** Spatial Frequency carries the most weight (0.40) but predicts almost nothing (ρ −0.10 to 0.40). It measures the share of fine detail and ignores contrast. Color Entropy and Edge Density do the work.
+* **Next step:** fix Spatial Frequency, then retest on a separate dataset, not this one.
+* **Caveat:** this measures visual complexity, which is close to "overwhelming" but not the same.
+
+Full report: [validation/output/SAVOIAS_REPORT.md](validation/output/SAVOIAS_REPORT.md).
+
 ## Zero-Disruption Architecture
 
 ```

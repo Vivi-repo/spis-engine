@@ -3,3 +3,12 @@ dist
 .vercel
 *.local
 .DS_Store
+
+# validation
+validation/.venv/
+validation/images/
+validation/output/contact_sheet.png
+__pycache__/
+.pytest_cache/
+validation/datasets/
+validation/output/savoias_scores.csv
